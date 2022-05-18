@@ -2,13 +2,13 @@ const fs = require('fs');
 
 const randomInt = limit => Math.floor(Math.random() * limit);
 
-const readWords = file => fs.readFileSync(file, 'utf8').split('\n');
+const readWords = file => JSON.parse(fs.readFileSync(file, 'utf8'));
 
 const randomWord = list => list[randomInt(list.length)];
 
 const writeToFile = (file, content) => fs.writeFileSync(file, content, 'utf8');
 
-const startUpData = function (word) {
+const setUpData = function (word) {
   return {
     word: word.toLowerCase(),
     guessedWords: [],
@@ -16,11 +16,11 @@ const startUpData = function (word) {
   };
 };
 
-const main = function () {
-  const words = readWords('./resources/words.txt');
+const main = function (wordsFile, gameDataFile) {
+  const words = readWords(wordsFile);
 
-  const data = startUpData(randomWord(words))
-  writeToFile('./resources/data.json', JSON.stringify(data));
+  const data = setUpData(randomWord(words))
+  writeToFile(gameDataFile, JSON.stringify(data));
 };
 
-main();
+main('./resources/words.json', './resources/data.json');
