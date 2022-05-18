@@ -1,34 +1,23 @@
-const { lettersValidation } = require('./wordValidation.js');
-
 const fs = require('fs');
-const stringify = JSON.stringify;
-const parse = JSON.parse;
+
+const { validate } = require('./wordValidation.js');
 
 const readFile = filePath => fs.readFileSync(filePath, 'utf8');
 
-const readJSON = file => parse(fs.readFileSync(file));
+const writeFile = (file, content) => fs.writeFileSync(file, content, 'utf8');
 
-const writeJson = function (file, content) {
-  fs.writeFileSync(file, stringify(content), 'utf8');
-};
+const readJSON = file => JSON.parse(readFile(file));
 
-const writeFile = function (file, content) {
-  fs.writeFileSync(file, content, 'utf8');
-};
+const writeJson = (file, content) => writeFile(file, JSON.stringify(content));
 
-const updateGameStatus = function (data, guess) {
-  if (data.word === guess || data.guessedWords.length === 6) {
-    data.isGameOver = true;
-  }
-  return data;
-};
+const isGameOver = (word, guess, guesses) =>
+  word === guess || guesses.length === 6;
 
-const updateGameData = function (data, guess) {
-  const wordResult = lettersValidation(data.word, guess);
-  data.guessedWords.push(wordResult);
-
-  data = updateGameStatus(data, guess);
-  return data;
+const updateGameData = function (gameData, guess) {
+  const wordResult = validate(gameData.word, guess);
+  gameData.guessedWords.push(wordResult);
+  gameData.isGameOver = isGameOver(gameData.word, guess, gameData.guessedWords);
+  return gameData;
 };
 
 exports.updateGameData = updateGameData;

@@ -1,21 +1,15 @@
-const { updateGameData, readFile, readJSON, writeFile, writeJson } = require('./dataModifiers.js');
-const { isWordValid } = require('./wordValidation.js');
-
-const getMessage = function (data, guess) {
-  if (data.word === guess) {
+const getMessage = function (word, guess, prevGuesses) {
+  if (word === guess) {
     return 'CONGRAGULATIONS!!! You got it right';
   }
-  if (data.guessedWords.length === 6) {
-    return 'OOPS!!! Better luck next time. Correct word was ' + data.word;
+  if (prevGuesses.length === 6) {
+    return 'OOPS!!! Better luck next time. Correct word was ' + word;
   }
   return '';
 };
 
 const generateTag = function (tag, content, property) {
-  let style = '';
-  if (property) {
-    style = ' class="' + property + '"';
-  }
+  let style = property ? ' class="' + property + '"' : '';
   return '<' + tag + style + '>' + content + '</' + tag + '>';
 };
 
@@ -44,39 +38,23 @@ const emptyRows = function (numOfRows) {
   return rows;
 };
 
-const gameChart = function (prevAttempts) {
-  const generatedWords = prevAttempts.map(generateWord);
-  const attemptsLeft = 6 - prevAttempts.length;
+const gameChart = function (prevGuesses) {
+  const generatedWords = prevGuesses.map(generateWord);
+  const attemptsLeft = 6 - prevGuesses.length;
   const generatedEmptyRows = emptyRows(attemptsLeft);
   return generatedWords.concat(generatedEmptyRows).join('');
 };
 
-const generatePage = function (data, guess, templateAsString) {
-  const message = getMessage(data, guess);
-  const wordleChart = gameChart(data.guessedWords);
+const generatePage = function (gameData, guess, templateAsString) {
+  const message = getMessage(gameData.word, guess, gameData.guessedWords);
+  const wordleChart = gameChart(gameData.guessedWords);
   let webpage = templateAsString.replace(/_GUESSED-WORDS_/, wordleChart);
   return webpage.replace(/_MESSAGE_/, message);
 };
 
-const main = function (guess, dataFile, template, wordsFile) {
-  const validWords = readFile(wordsFile);
-  if (!isWordValid(guess, validWords)) {
-    console.log('Enter 5 letter valid word');
-    return 0;
-  }
-
-  let data = readJSON(dataFile);
-  const templateAsString = readFile(template);
-
-  data = updateGameData(data, guess);
-  writeJson(dataFile, data);
-
-  const webpage = generatePage(data, guess, templateAsString);
-  writeFile('./index.html', webpage);
-};
-
-const dataFile = './resources/data.json';
-const template = './resources/template.html';
-const wordsFile = './resources/words.txt';
-
-main(process.argv[2], dataFile, template, wordsFile);
+exports.generateTag = generateTag;
+exports.generateLetter = generateLetter;
+exports.generateWord = generateWord;
+exports.generatePage = generatePage;
+exports.emptyRow = emptyRow;
+exports.emptyRows = emptyRows;

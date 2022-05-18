@@ -2,20 +2,20 @@ const { updateGameData, readFile, readJSON, writeFile, writeJson } = require('./
 const { isWordValid } = require('./wordValidation.js');
 const { generatePage } = require('./webpageGeneration.js');
 
-const main = function (guess, { dataFile, template, wordsFile }) {
+const main = function (guess, { gameDataFile, template, wordsFile }) {
   const validWords = readJSON(wordsFile);
   if (!isWordValid(guess, validWords)) {
     console.log('Enter 5 letter valid word');
     return 0;
   }
 
-  let data = readJSON(dataFile);
+  let gameData = readJSON(gameDataFile);
   const templateAsString = readFile(template);
 
-  data = updateGameData(data, guess);
-  writeJson(dataFile, data);
+  gameData = updateGameData(gameData, guess);
+  writeJson(gameDataFile, gameData);
 
-  const webpage = generatePage(data, guess, templateAsString);
+  const webpage = generatePage(gameData, guess, templateAsString);
   writeFile('./index.html', webpage);
 };
 

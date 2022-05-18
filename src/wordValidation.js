@@ -1,6 +1,6 @@
 const incrementOccurence = function (frequency, letter) {
-  const occurence = frequency[letter] ? ++frequency[letter] : 1;
-  frequency[letter] = occurence;
+  frequency[letter] = frequency[letter] || 0;
+  frequency[letter]++;
   return frequency;
 };
 
@@ -8,48 +8,35 @@ const getFrequency = function (word) {
   return [...word].reduce(incrementOccurence, {});
 };
 
-const isKeyPresent = function (object, key) {
-  return Object.keys(object).includes(key);
-};
-
-const isPresent = function (letter, actualWordFrequency, guessedWordFrequency) {
-  if (!isKeyPresent(actualWordFrequency, letter)) {
-    return false;
-  }
-  return actualWordFrequency[letter] > guessedWordFrequency[letter];
-};
-
 const isAtCorrectPosition = function (word, guess, index) {
   return word[index] === guess[index];
 };
 
-const setToZero = function (frequency, letter) {
-  frequency[letter] = 0;
-  return frequency;
-};
-
-const initializeFrequency = function (word) {
-  return [...word].reduce(setToZero, {});
-};
-
-const lettersValidation = function (word, guess) {
-  const result = [];
-  const frequency = getFrequency(word);
-  const guessedWordFrequency = initializeFrequency(guess);
-
-  for (let index = 0; index < guess.length; index++) {
-    let status = 'absent';
-    if (isAtCorrectPosition(word, guess, index)) {
-      incrementOccurence(guessedWordFrequency, guess[index])
-      status = 'correct';
-    }
-    else if (isPresent(guess[index], frequency, guessedWordFrequency)) {
-      incrementOccurence(guessedWordFrequency, guess[index])
-      status = 'present';
-    }
-    result.push([guess[index], status]);
+const validateLetter = (isInPlace, isPresent, canBeCounted) => {
+  if (isInPlace) {
+    return 'correct';
   }
-  return result;
+  if (isPresent && canBeCounted) {
+    return 'present';
+  }
+  return 'absent';
+};
+
+const validate = (word, guess) => {
+  const counts = getFrequency(word);
+  const validations = [];
+  for (let index = 0; index < guess.length; index++) {
+    const isInPlace = isAtCorrectPosition(word, guess, index);
+    const isPresent = word.includes(guess[index]);
+    const canBeCounted = counts[guess[index]] > 0;
+
+    const status = validateLetter(isInPlace, isPresent, canBeCounted);
+    if (status !== 'absent') {
+      counts[guess[index]]--;
+    }
+    validations.push([guess[index], status]);
+  }
+  return validations;
 };
 
 const isWordValid = function (word, validWords) {
@@ -57,4 +44,4 @@ const isWordValid = function (word, validWords) {
 };
 
 exports.isWordValid = isWordValid;
-exports.lettersValidation = lettersValidation;
+exports.validate = validate;
