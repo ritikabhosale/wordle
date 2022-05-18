@@ -13,11 +13,11 @@ const writeJson = (file, content) => writeFile(file, JSON.stringify(content));
 const isGameOver = (word, guess, guesses) =>
   word === guess || guesses.length === 6;
 
-const updateGameData = function (gameData, guess) {
-  const wordResult = validate(gameData.word, guess);
-  gameData.guessedWords.push(wordResult);
-  gameData.isGameOver = isGameOver(gameData.word, guess, gameData.guessedWords);
-  return gameData;
+const updateGameData = function (data, guess) {
+  const wordResult = validate(data.word, guess);
+  data.guessedWords.push(wordResult);
+  data.isGameOver = isGameOver(data.word, guess, data.guessedWords);
+  return data;
 };
 
 exports.updateGameData = updateGameData;

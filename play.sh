@@ -1,13 +1,14 @@
 node ./resources/setUp.js
 
-gameStatus=$( cat ./resources/data.json | grep 'isGameOver' | grep 'false' )
+gameStatus=1
 
-while [[ $gameStatus ]]
+while [[ $gameStatus == 1 ]]
 do
     read -p "Enter your 5 letter guess: " guess
     node src/main.js $guess
+    
+    if [[ $? == 1 ]]; then gameStatus=0; fi
     open index.html
-    gameStatus=$( cat ./resources/data.json | grep 'isGameOver' | grep 'false' )
 done
 
 rm -r resources/data.json
