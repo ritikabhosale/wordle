@@ -45,3 +45,7 @@ const isWordValid = function (word, validWords) {
 
 exports.isWordValid = isWordValid;
 exports.validate = validate;
+exports.incrementOccurence = incrementOccurence;
+exports.getFrequency = getFrequency;
+exports.isAtCorrectPosition = isAtCorrectPosition;
+exports.validateLetter = validateLetter;
