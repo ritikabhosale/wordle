@@ -66,12 +66,12 @@ describe('generateTag', () => {
 
 describe('generateWord', () => {
   it('should create a 1 letter word with given class and letter', () => {
-    const expected = '<div class="word"><div class="present">a</div></div>'
+    const expected = '<div class="word"><div class="present">a</div></div>';
     assert.deepStrictEqual(generateWord([['a', 'present']]), expected);
   });
 
   it('should create a 2 letter word with given classes and letters', () => {
-    const expected = '<div class="word"><div class="present">a</div><div class="absent">n</div></div>'
+    const expected = '<div class="word"><div class="present">a</div><div class="absent">n</div></div>';
     assert.deepStrictEqual(generateWord([['a', 'present'], ['n', 'absent']]), expected);
   });
 });

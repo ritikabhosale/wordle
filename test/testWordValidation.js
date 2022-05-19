@@ -1,4 +1,4 @@
-const { incrementOccurence, getFrequency, isAtCorrectPosition, validateLetter, isWordValid } = require("../src/wordValidation");
+const { incrementOccurence, getFrequency, isAtCorrectPosition, validateLetter, isWordValid } = require('../src/wordValidation');
 const assert = require('assert');
 
 describe('incrementOccurence', () => {
