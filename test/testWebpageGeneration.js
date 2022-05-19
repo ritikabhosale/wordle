@@ -1,5 +1,5 @@
 const assert = require('assert');
-const { emptyRow, emptyRows, generateTag, generateLetter, generateWord } = require('../src/webpageGeneration.js');
+const { emptyRow, emptyRows, generateTag, generateLetter, generateWord, getMessage } = require('../src/webpageGeneration.js');
 
 describe('emptyRow', () => {
   it('should create a row of a cell', () => {
@@ -73,5 +73,22 @@ describe('generateWord', () => {
   it('should create a 2 letter word with given classes and letters', () => {
     const expected = '<div class="word"><div class="present">a</div><div class="absent">n</div></div>'
     assert.deepStrictEqual(generateWord([['a', 'present'], ['n', 'absent']]), expected);
+  });
+});
+
+describe('getMessage', () => {
+  it('should generate message for correct guess', () => {
+    const expected = 'CONGRAGULATIONS!!! You got it right';
+    assert.deepEqual(getMessage('cat', 'cat', []), expected);
+  });
+
+  it('should generate message when number of  guesses exhaust', () => {
+    const expected = 'OOPS!!! Better luck next time. Correct word was cat';
+    assert.deepEqual(getMessage('cat', 'rat', [[], [], [], [], [], []]), expected);
+  });
+
+  it('should not generate message if guesses are left and guess is incorrect', () => {
+    const expected = '';
+    assert.deepEqual(getMessage('cat', 'sat', [[]]), expected);
   });
 });

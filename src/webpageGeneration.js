@@ -58,3 +58,4 @@ exports.generateWord = generateWord;
 exports.generatePage = generatePage;
 exports.emptyRow = emptyRow;
 exports.emptyRows = emptyRows;
+exports.getMessage = getMessage;
