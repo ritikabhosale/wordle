@@ -1,4 +1,5 @@
-const { updateGameData, readFile, readJSON, writeFile, writeJson } = require('./updateGameData.js');
+const { readFile, writeFile, writeJson, readJSON } = require("./fsUtils");
+const { updateGameData } = require('./updateGameData.js');
 const { isWordValid } = require('./wordValidation.js');
 const { generatePage } = require('./webpageGeneration.js');
 
